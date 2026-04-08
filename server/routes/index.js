@@ -1,0 +1,21 @@
+const Router = require('express')
+const router = new Router()
+const userRouter = require('./userRouter')
+const profileRouter = require('./profileRouter')
+const categoryRouter = require('./categoryRouter')
+const projectRouter = require('./projectRouter')
+const bidRouter = require('./bidRouter')
+const orderRouter = require('./orderRouter')
+const messageRouter = require('./messageRouter')
+const reviweRouter = require('./reviewRouter')
+
+router.use('/user', userRouter)
+router.use('/profile', profileRouter)
+router.use('/category', categoryRouter)
+router.use('/bid', bidRouter)
+router.use('/order', orderRouter)
+router.use('/message', messageRouter)
+router.use('/project', projectRouter)
+router.use('/review', reviweRouter)
+
+module.exports = router

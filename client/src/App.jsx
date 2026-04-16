@@ -1,11 +1,38 @@
-import { useState } from 'react'
 import './App.css'
 import { BrowserRouter } from 'react-router-dom'
 import AppRouter from './components/AppRouter'
 import Navbar from './components/Navbar'
+import { useContext, useEffect, useState } from 'react'
+import { Context } from './main'
+import { checkAuth } from './http/userApi'
+import { Spinner } from 'react-bootstrap'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { user } = useContext(Context)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      checkAuth()
+        .then(token => {
+          const payload = JSON.parse(atob(token.split('.')[1]))
+          user.setUser(payload)
+          user.setIsAuth(true)
+        })
+        .catch(() => {
+          localStorage.removeItem('token')
+        })
+        .finally(() => setLoading(false))
+    } else {
+      setLoading(false)
+    }
+  }, [])
+
+  if (loading) return (
+    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+      <Spinner animation="border" variant="primary" />
+    </div>
+  )
 
   return (
     <BrowserRouter>

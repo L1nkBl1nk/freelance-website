@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { Context } from "../main"
 import {Navbar as BootstrapNavbar, Container, Nav, Button, Image} from "react-bootstrap"
 import { useNavigate, NavLink } from "react-router-dom"
-import { LOGIN_ROUTE, MAIN_ROUTE, PROFILE_ROUTE, REGISTER_ROUTE } from "../utils/consts"
+import { LOGIN_ROUTE, MAIN_ROUTE, PROFILE_ROUTE, PROJECTS_ROUTE, REGISTER_ROUTE } from "../utils/consts"
 import {observer} from "mobx-react-lite"
 
 
@@ -13,18 +13,25 @@ const Navbar = observer(() => {
         <>
       <BootstrapNavbar bg="dark" data-bs-theme="dark">
         <Container>
-          <NavLink style={{color:'white'}} to={MAIN_ROUTE}>Freelance Web</NavLink>
+          <NavLink style={{color:'white', textDecoration:'none'}} to={MAIN_ROUTE}>Freelance Web</NavLink>
+          <NavLink className={"ms-3"} style={{color:'white', textDecoration:'none'}} to={PROJECTS_ROUTE}>Projects</NavLink>
           {user.isAuth ? 
           <Nav className="ms-auto">
-            <Image 
-              className="me-3" 
-              width={35} 
-              height={35} 
+            <Image
+              className="me-3"
+              width={35}
+              height={35}
               roundedCircle
-              style={{cursor: "pointer"}}
+              src={user.user?.img || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='35' height='35'%3E%3Crect width='35' height='35' fill='%23dee2e6' rx='50'/%3E%3C/svg%3E"}
+              style={{cursor: "pointer", objectFit: "cover"}}
               onClick={() => navigate(PROFILE_ROUTE)}
             />
-            <Button variant={"outline-light"} >Log out</Button>
+            <Button variant={"outline-light"} onClick={() => {
+                localStorage.removeItem('token')
+                user.setIsAuth(false)
+                user.setUser({})
+                navigate(LOGIN_ROUTE)
+            }}>Log out</Button>
           </Nav>
            : <Nav className="ms-auto">
             <Button variant={"outline-light"} onClick={() => navigate(REGISTER_ROUTE)}>Sign In</Button>

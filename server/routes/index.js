@@ -7,7 +7,7 @@ const projectRouter = require('./projectRouter')
 const bidRouter = require('./bidRouter')
 const orderRouter = require('./orderRouter')
 const messageRouter = require('./messageRouter')
-const reviweRouter = require('./reviewRouter')
+const reviewRouter = require('./reviewRouter')
 
 router.use('/user', userRouter)
 router.use('/profile', profileRouter)
@@ -16,6 +16,6 @@ router.use('/bid', bidRouter)
 router.use('/order', orderRouter)
 router.use('/message', messageRouter)
 router.use('/project', projectRouter)
-router.use('/review', reviweRouter)
+router.use('/review', reviewRouter)
 
 module.exports = router

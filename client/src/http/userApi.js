@@ -1,5 +1,43 @@
-import { $authHost, $host } from "./index";
+import { $authHost, $host } from "./index"
 
-export const registration = async (email, password) =>{
-    const response = await $host.post('api/host')
-} 
+export const registration = async (username, email, password, role) => {
+    const {data} = await $host.post('api/user/registration', {username, email, password, role})
+    return data
+}
+
+export const login = async (email, password) => {
+    const {data} = await $host.post('api/user/login', {email, password})
+    return data
+}
+
+export const checkAuth = async () => {
+    const {data} = await $authHost.get('api/user/auth')
+    return data
+}
+
+export const getProfile = async (userId) => {
+    const { data } = await $authHost.get(`api/profile/${userId}`)
+    return data
+}
+
+export const createProfile = async () => {
+    const { data } = await $authHost.post('api/profile', {})
+    return data
+}
+
+export const updateSkills = async (profileId, skills) => {
+    const { data } = await $authHost.put(`api/profile/${profileId}`, { skills })
+    return data
+}
+
+export const updateBio = async (profileId, bio) => {
+    const { data } = await $authHost.put(`api/profile/${profileId}`, { bio })
+    return data
+}
+
+export const updateProfileImg = async (profileId, imgFile) => {
+    const formData = new FormData()
+    formData.append('img', imgFile)
+    const { data } = await $authHost.put(`api/profile/${profileId}`, formData)
+    return data
+}

@@ -22,7 +22,7 @@ const Navbar = observer(() => {
               width={35}
               height={35}
               roundedCircle
-              src={user.user?.img || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='35' height='35'%3E%3Crect width='35' height='35' fill='%23dee2e6' rx='50'/%3E%3C/svg%3E"}
+              src={user.profileImg || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='35' height='35'%3E%3Crect width='35' height='35' fill='%23dee2e6' rx='50'/%3E%3C/svg%3E"}
               style={{cursor: "pointer", objectFit: "cover"}}
               onClick={() => navigate(PROFILE_ROUTE)}
             />

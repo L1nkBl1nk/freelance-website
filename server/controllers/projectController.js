@@ -1,11 +1,19 @@
+const uuid = require('uuid')
+const path = require('path')
 const ApiError = require('../error/ApiError')
 const {Project, User, Category} = require('../models/models')
 
 class projectController{
     async create(req,res,next){
         try {
-            const {title, description, img, budget, status, userId, categoryId} = req.body
-            const project = await Project.create({title, description, img, budget, status, UserId: userId, CategoryId: categoryId})
+            const {title, description, budget, categoryId} = req.body || {}
+            const userId = req.user.id
+            let fileName = null
+            if (req.files && req.files.img) {
+                fileName = uuid.v4() + '.jpg'
+                await req.files.img.mv(path.resolve(__dirname, '..', 'static', fileName))
+            }
+            const project = await Project.create({title, description, img: fileName, budget, UserId: userId, CategoryId: categoryId})
             return res.json(project)
         } catch (error) {
             return next(ApiError.badRequest(error.message))
@@ -50,10 +58,11 @@ class projectController{
     async update(req,res,next){
         try {
             const {id} = req.params
-            const {title, description, img, budget, status} = req.body
+            const {title, description, budget, status} = req.body
             const project = await Project.findByPk(id)
-            if (!project) return res.status(404).json({message:'Project not found'})
-            await project.update({title, description, img, budget, status}) 
+            if (!project) return next(ApiError.badRequest('Project not found'))
+            if (project.UserId !== req.user.id) return next(ApiError.forbidden('Access denied'))
+            await project.update({title, description, budget, status})
             return res.json(project)
         } catch (error) {
             return next(ApiError.badRequest(error.message))
@@ -64,7 +73,8 @@ class projectController{
         try {
             const { id } = req.params
             const project = await Project.findByPk(id)
-            if (!project) return res.status(404).json({ message: 'Project not found' })
+            if (!project) return next(ApiError.badRequest('Project not found'))
+            if (project.UserId !== req.user.id) return next(ApiError.forbidden('Access denied'))
             await project.destroy()
             return res.json({message: 'Successfully deleted'})
         } catch (e) {

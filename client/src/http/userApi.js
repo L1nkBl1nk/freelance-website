@@ -41,3 +41,24 @@ export const updateProfileImg = async (profileId, imgFile) => {
     const { data } = await $authHost.put(`api/profile/${profileId}`, formData)
     return data
 }
+
+export const getCategories = async () => {
+    const { data } = await $host.get('api/category')
+    return data
+}
+
+export const createProject = async (title, description, budget, categoryId, imgFile) => {
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('description', description)
+    formData.append('budget', budget)
+    formData.append('categoryId', categoryId)
+    if (imgFile) formData.append('img', imgFile)
+    const { data } = await $authHost.post('api/project', formData)
+    return data
+}
+
+export const getProject = async(projectId) => {
+    const { data } = await $host.get(`api/project/${projectId}`)
+    return data
+}

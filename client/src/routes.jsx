@@ -28,10 +28,6 @@ export const authRoutes = [
         Component: Bids
     },
     {
-        path: PROJECTPAGE_ROUTE,
-        Component: ProjectPage
-    },
-    {
         path: USERPROJECTS_ROUTE,
         Component: UserProjects
     },
@@ -45,6 +41,10 @@ export const publicRoutes = [
     {
         path: PROJECTS_ROUTE,
         Component: Projects
+    },
+    {
+        path: PROJECTPAGE_ROUTE,
+        Component: ProjectPage
     },
     {
         path: LOGIN_ROUTE,

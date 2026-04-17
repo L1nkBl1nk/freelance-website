@@ -25,7 +25,11 @@ const Profile = observer(() => {
                 setProfile(data)
                 if (data.skills) setSkills(data.skills.split(', '))
                 setBioValue(data.bio || "")
-                if (data.img) setImgPreview(`${import.meta.env.VITE_API_URL}${data.img}`)
+                if (data.img) {
+                    const imgUrl = `${import.meta.env.VITE_API_URL}${data.img}`
+                    setImgPreview(imgUrl)
+                    user.setProfileImg(imgUrl)
+                }
             })
             .catch(async (e) => {
                 console.log('getProfile error status:', e.response?.status, e.message)
@@ -62,10 +66,17 @@ const Profile = observer(() => {
     const handleImgChange = async (e) => {
         const file = e.target.files[0]
         if (!file) return
-        setImgPreview(URL.createObjectURL(file))
+        const localUrl = URL.createObjectURL(file)
+        setImgPreview(localUrl)
+        user.setProfileImg(localUrl)
         if (profile?.id) {
             try {
-                await updateProfileImg(profile.id, file)
+                const updated = await updateProfileImg(profile.id, file)
+                if (updated?.img) {
+                    const serverUrl = `${import.meta.env.VITE_API_URL}${updated.img}`
+                    setImgPreview(serverUrl)
+                    user.setProfileImg(serverUrl)
+                }
             } catch (err) {
                 console.error('Image upload error:', err.response?.data || err.message)
             }

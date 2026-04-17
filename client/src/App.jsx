@@ -4,7 +4,7 @@ import AppRouter from './components/AppRouter'
 import Navbar from './components/Navbar'
 import { useContext, useEffect, useState } from 'react'
 import { Context } from './main'
-import { checkAuth } from './http/userApi'
+import { checkAuth, getProfile } from './http/userApi'
 import { Spinner } from 'react-bootstrap'
 
 function App() {
@@ -18,6 +18,12 @@ function App() {
           const payload = JSON.parse(atob(token.split('.')[1]))
           user.setUser(payload)
           user.setIsAuth(true)
+          return getProfile(payload.id)
+        })
+        .then(profile => {
+          if (profile?.img) {
+            user.setProfileImg(`${import.meta.env.VITE_API_URL}${profile.img}`)
+          }
         })
         .catch(() => {
           localStorage.removeItem('token')

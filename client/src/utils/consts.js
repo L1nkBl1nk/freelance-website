@@ -8,7 +8,9 @@ export const PROJECTPAGE_ROUTE = '/project/:id'
 export const PROJECTS_ROUTE = '/projects'
 export const USERPROJECTS_ROUTE = '/userProject'
 export const BIDS_ROUTE = '/bids'
+export const BIDPAGE_ROUTE = '/bid/:id'
 
 
 
 
+export const APPLICATIONS_ROUTE = '/applications'

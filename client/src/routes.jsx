@@ -4,10 +4,12 @@ import Profile from './pages/Profile'
 import Orders from './pages/Orders'
 import OrderPage from './pages/OrderPage'
 import Bids from './pages/Bids'
+import BidPage from './pages/BidPage'
+import Applications from './pages/Applications'
 import ProjectPage from './pages/ProjectPage'
 import UserProjects from './pages/UserProjects'
 import Auth from './pages/Auth'
-import { BIDS_ROUTE, LOGIN_ROUTE, MAIN_ROUTE, ORDERPAGE_ROUTE, ORDERS_ROUTE, PROFILE_ROUTE, PROJECTPAGE_ROUTE, PROJECTS_ROUTE, REGISTER_ROUTE, USERPROJECTS_ROUTE } from "./utils/consts"
+import { APPLICATIONS_ROUTE, BIDPAGE_ROUTE, BIDS_ROUTE, LOGIN_ROUTE, MAIN_ROUTE, ORDERPAGE_ROUTE, ORDERS_ROUTE, PROFILE_ROUTE, PROJECTPAGE_ROUTE, PROJECTS_ROUTE, REGISTER_ROUTE, USERPROJECTS_ROUTE } from "./utils/consts"
 
 
 export const authRoutes = [
@@ -28,8 +30,16 @@ export const authRoutes = [
         Component: Bids
     },
     {
+        path: BIDPAGE_ROUTE,
+        Component: BidPage
+    },
+    {
         path: USERPROJECTS_ROUTE,
         Component: UserProjects
+    },
+    {
+        path: APPLICATIONS_ROUTE,
+        Component: Applications
     },
 ]
 

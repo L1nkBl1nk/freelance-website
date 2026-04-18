@@ -41,9 +41,26 @@ class bidController{
     async getOneBid(req,res, next){
         try {
             const {bidId} = req.params
-            const bid = await Bid.findByPk(bidId)
+            const bid = await Bid.findByPk(bidId, {
+                include: [{ model: Project }]
+            })
             if (!bid) return next(ApiError.badRequest('Bid not found'))
             return res.json(bid)
+        } catch (error) {
+            return next(ApiError.badRequest(error.message))
+        }
+    }
+
+    async getClientBids(req, res, next){
+        try {
+            const { userId } = req.params
+            const bids = await Bid.findAll({
+                include: [
+                    { model: Project, where: { UserId: userId } },
+                    { model: User, attributes: ['id', 'username'] }
+                ]
+            })
+            return res.json(bids)
         } catch (error) {
             return next(ApiError.badRequest(error.message))
         }

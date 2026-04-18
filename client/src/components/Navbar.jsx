@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { Context } from "../main"
 import {Navbar as BootstrapNavbar, Container, Nav, Button, Image} from "react-bootstrap"
 import { useNavigate, NavLink } from "react-router-dom"
-import { LOGIN_ROUTE, MAIN_ROUTE, PROFILE_ROUTE, PROJECTS_ROUTE, REGISTER_ROUTE } from "../utils/consts"
+import { APPLICATIONS_ROUTE, BIDS_ROUTE, LOGIN_ROUTE, MAIN_ROUTE, PROFILE_ROUTE, PROJECTS_ROUTE, REGISTER_ROUTE } from "../utils/consts"
 import {observer} from "mobx-react-lite"
 
 
@@ -15,6 +15,11 @@ const Navbar = observer(() => {
         <Container>
           <NavLink style={{color:'white', textDecoration:'none'}} to={MAIN_ROUTE}>Freelance Web</NavLink>
           <NavLink className={"ms-3"} style={{color:'white', textDecoration:'none'}} to={PROJECTS_ROUTE}>Projects</NavLink>
+          {user.isAuth && (
+            user.user?.role === 'client'
+              ? <NavLink className={"ms-3"} style={{color:'white', textDecoration:'none'}} to={APPLICATIONS_ROUTE}>Applications</NavLink>
+              : <NavLink className={"ms-3"} style={{color:'white', textDecoration:'none'}} to={BIDS_ROUTE}>Your Bids</NavLink>
+          )}
           {user.isAuth ? 
           <Nav className="ms-auto">
             <Image

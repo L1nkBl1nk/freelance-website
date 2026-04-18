@@ -62,3 +62,28 @@ export const getProject = async(projectId) => {
     const { data } = await $host.get(`api/project/${projectId}`)
     return data
 }
+
+export const createBid = async(price, message, userId, projectId) => {
+    const { data } = await $authHost.post('api/bid', {price, message, userId, projectId})
+    return data
+}
+
+export const getBids = async(userId) => {
+    const { data } = await $authHost.get(`api/bid/user/${userId}`)
+    return  data 
+}
+
+export const getBid = async(bidId) => {
+    const { data } = await $authHost.get(`api/bid/${bidId}`)
+    return data
+}
+
+export const getClientBids = async(userId) => {
+    const { data } = await $authHost.get(`api/bid/client/${userId}`)
+    return data
+}
+
+export const createOrder = async(bidId) => {
+    const { data } = await $authHost.post("api/order", { bidId })
+    return data
+}

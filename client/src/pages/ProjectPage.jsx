@@ -1,12 +1,30 @@
-import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import { Container, Row, Col, Card, Button, Image, Badge, Spinner } from "react-bootstrap"
-import { getProject } from "../http/userApi"
+import { useEffect, useState, useContext } from "react"
+import { useParams, useNavigate } from "react-router-dom"
+import { Container, Row, Col, Card, Button, Image, Badge, Spinner, Form } from "react-bootstrap"
+import { createBid, getProject } from "../http/userApi"
+import { Context } from "../main"
+import { APPLICATIONS_ROUTE } from "../utils/consts"
 
 const ProjectPage = () => {
+    const { user } = useContext(Context)
     const { id } = useParams()
+    const navigate = useNavigate()
     const [project, setProject] = useState(null)
     const [error, setError] = useState(null)
+    const [showBidForm, setShowBidForm] = useState(false)
+    const [bidPrice, setBidPrice] = useState("")
+    const [bidMessage, setBidMessage] = useState("")
+    const [bidSubmitted, setBidSubmitted] = useState(false)
+
+    const handleCreateBid = async () => {
+        try {
+            await createBid(Number(bidPrice), bidMessage, user.user.id, Number(id))
+            setBidSubmitted(true)
+            setShowBidForm(false)
+        } catch (e) {
+            alert(e.response?.data?.message || 'Failed to submit bid')
+        }
+    }
 
     useEffect(() => {
         getProject(id)
@@ -73,8 +91,53 @@ const ProjectPage = () => {
                                 <span className="text-muted">Budget</span>
                                 <div style={{ fontSize: 28, fontWeight: 700 }}>${project.budget}</div>
                             </div>
-                            <Button className="w-100 mb-2" variant="primary">Make a Bid</Button>
-                            <Button className="w-100" variant="outline-secondary">Contact Client</Button>
+                            {user.user?.role === "freelancer"
+                                ? <>
+                                    {project.status !== 'open'
+                                        ? <Button className="w-100 mb-2" variant="secondary" disabled>
+                                            Project is {project.status.replace('_', ' ')}
+                                          </Button>
+                                        : bidSubmitted
+                                        ? <Button className="w-100 mb-2" variant="success" disabled>Bid Submitted ✓</Button>
+                                        : <Button
+                                            className="w-100 mb-2"
+                                            variant="primary"
+                                            onClick={() => setShowBidForm(v => !v)}
+                                          >
+                                            Make a Bid
+                                          </Button>
+                                    }
+                                    {showBidForm && !bidSubmitted && project.status === 'open' && (
+                                        <Form className="mt-2">
+                                            <Form.Control
+                                                className="mb-2"
+                                                type="number"
+                                                placeholder="Your price ($)"
+                                                value={bidPrice}
+                                                onChange={e => setBidPrice(e.target.value)}
+                                            />
+                                            <Form.Control
+                                                className="mb-2"
+                                                as="textarea"
+                                                rows={3}
+                                                placeholder="Your message..."
+                                                value={bidMessage}
+                                                onChange={e => setBidMessage(e.target.value)}
+                                            />
+                                            <Button
+                                                className="w-100"
+                                                variant="success"
+                                                onClick={handleCreateBid}
+                                                disabled={!bidPrice || !bidMessage}
+                                            >
+                                                Submit Bid
+                                            </Button>
+                                        </Form>
+                                    )}
+                                    <Button className="w-100 mt-2" variant="outline-secondary">Contact Client</Button>
+                                  </>
+                                : <Button className="w-100 mb-2" variant="primary" onClick={() => navigate(APPLICATIONS_ROUTE)}>Watch bids for your project</Button>
+                            }
                         </Card.Body>
                     </Card>
                 </Col>

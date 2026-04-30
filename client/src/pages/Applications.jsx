@@ -4,7 +4,7 @@ import { Context } from "../main"
 import { Container, Row, Col, Card, Badge, Spinner, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import { getClientBids, createOrder } from "../http/userApi"
-import { PROJECTPAGE_ROUTE } from "../utils/consts"
+import { PROJECTPAGE_ROUTE, ORDERS_ROUTE } from "../utils/consts"
 
 const Applications = observer(() => {
     const { user } = useContext(Context)
@@ -18,6 +18,7 @@ const Applications = observer(() => {
         try {
             await createOrder(bidId)
             setAccepted(prev => ({ ...prev, [bidId]: true }))
+            navigate(ORDERS_ROUTE)
         } catch (err) {
             alert(err.response?.data?.message || 'Failed to create order')
         }

@@ -87,3 +87,38 @@ export const createOrder = async(bidId) => {
     const { data } = await $authHost.post("api/order", { bidId })
     return data
 }
+
+export const getOrderMessage = async(orderID) => {
+    const { data } = await $authHost.get(`api/message/${orderID}`)
+    return data
+}
+
+export const postMessage = async (content, orderId, userId) => {
+    const { data } = await $authHost.post('api/message', {content, orderId, userId})
+    return data
+}
+
+export const getUserOrders = async(userId) => {
+    const { data } = await $authHost.get(`api/order/user/${userId}`)
+    return data
+}
+
+export const getOrder = async(orderId) => {
+    const { data } = await $authHost.get(`api/order/${orderId}`)
+    return data
+}
+
+export const updateOrderStatus = async(orderId, status) => {
+    const { data } = await $authHost.put(`api/order/${orderId}`, { status })
+    return data
+}
+
+export const createReview = async(rating, comment, orderId, reviewerId, targetUserId) => {
+    const { data } = await $authHost.post('api/review', { rating, comment, orderId, reviewerId, targetUserId })
+    return data
+}
+
+export const getUserReviews = async(userId) => {
+    const { data } = await $authHost.get(`api/review/user/${userId}`)
+    return data
+}

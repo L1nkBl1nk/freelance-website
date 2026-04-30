@@ -1,4 +1,4 @@
-const { Review, Order, User } = require("../models/models");
+const { Review, Order, User, Bid, Project } = require("../models/models");
 const ApiError = require("../error/ApiError");
 
 class reviewController{
@@ -33,7 +33,8 @@ class reviewController{
             const review = await Review.findAll({
                 where: {targetUserId: userId},
                 include: [
-                    {model: User, as:'reviewer', attributes:['id', 'username']}
+                    {model: User, as:'reviewer', attributes:['id', 'username']},
+                    {model: Order, attributes:['id', 'status']}
                 ]
             })
 

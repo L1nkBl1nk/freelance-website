@@ -2,7 +2,7 @@ import { Container, Image, Card, Badge, Row, Col, Form, InputGroup, Button } fro
 import { useState, useEffect, useContext, useRef } from "react"
 import { observer } from "mobx-react-lite"
 import { Context } from "../main"
-import { getProfile, createProfile, updateSkills, updateBio, updateProfileImg } from "../http/userApi"
+import { getProfile, createProfile, updateSkills, updateBio, updateProfileImg, getUserReviews } from "../http/userApi"
 
 const Profile = observer(() => {
     const { user } = useContext(Context)
@@ -15,6 +15,7 @@ const Profile = observer(() => {
     const [editBio, setEditBio] = useState(false)
     const [bioValue, setBioValue] = useState("")
     const [imgPreview, setImgPreview] = useState(null)
+    const [reviews, setReviews] = useState([])
 
     useEffect(() => {
         console.log('user.user:', user.user)
@@ -41,6 +42,11 @@ const Profile = observer(() => {
                 if (newProfile) setProfile(newProfile)
             })
     }, [user.user?.id])
+
+    useEffect(() => {
+        if (!user.user?.id || user.user?.role !== 'freelancer') return
+        getUserReviews(user.user.id).then(data => setReviews(data)).catch(() => {})
+    }, [user.user?.id, user.user?.role])
 
     const handleAddSkill = () => {
         if (inputValue.trim()) {
@@ -197,6 +203,38 @@ const Profile = observer(() => {
                     >
                         {showInput ? "Cancel" : "+ Add Skill"}
                     </Button>
+
+                    {user.user?.role === 'freelancer' && (
+                        <>
+                            <hr className="my-4" />
+                            <h5 className="fw-semibold mb-3">Reviews</h5>
+                            {!reviews.length
+                                ? <p className="text-muted">No reviews yet.</p>
+                                : reviews.map(r => (
+                                    <Card key={r.id} className="mb-3 border-0 bg-light" style={{ borderRadius: 10 }}>
+                                        <Card.Body className="p-3">
+                                            <div className="d-flex justify-content-between align-items-center mb-1">
+                                                <strong style={{ fontSize: 14 }}>{r.reviewer?.username}</strong>
+                                                <span style={{ color: '#ffc107', fontSize: 16 }}>
+                                                    {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
+                                                </span>
+                                            </div>
+                                            {r.Order?.status && (
+                                                <Badge
+                                                    bg={{ completed: 'success', cancelled: 'danger', in_progress: 'primary', pending: 'secondary' }[r.Order.status] || 'secondary'}
+                                                    className="mb-1"
+                                                    style={{ fontSize: 11 }}
+                                                >
+                                                    {r.Order.status.replace('_', ' ')}
+                                                </Badge>
+                                            )}
+                                            {r.comment && <p className="text-secondary mb-0 mt-1" style={{ fontSize: 13 }}>{r.comment}</p>}
+                                        </Card.Body>
+                                    </Card>
+                                ))
+                            }
+                        </>
+                    )}
                 </Card.Body>
             </Card>
         </Container>

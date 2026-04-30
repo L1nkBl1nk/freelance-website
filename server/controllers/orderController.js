@@ -16,9 +16,10 @@ class orderController{
             }
 
             const order = await Order.create({
-                bidId: bid.id,
+                BidId: bid.id,
                 clientId: bid.Project.UserId,
-                freelancerId: bid.UserId
+                freelancerId: bid.UserId,
+                status: 'in_progress'
             })
 
             await bid.Project.update({ status: 'in_progress' })
@@ -61,6 +62,7 @@ class orderController{
                 include:[
                     {model: User, as: 'client', attributes:['id', 'username'] },
                     {model: User, as: 'freelancer', attributes:['id', 'username'] },
+                    {model: Bid, include:[{model: Project}] },
                     {model: Message, include:[{model: User, attributes:['id', 'username']}] },
                     {model: Review},
                 ]

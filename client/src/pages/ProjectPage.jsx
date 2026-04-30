@@ -134,7 +134,6 @@ const ProjectPage = () => {
                                             </Button>
                                         </Form>
                                     )}
-                                    <Button className="w-100 mt-2" variant="outline-secondary">Contact Client</Button>
                                   </>
                                 : <Button className="w-100 mb-2" variant="primary" onClick={() => navigate(APPLICATIONS_ROUTE)}>Watch bids for your project</Button>
                             }

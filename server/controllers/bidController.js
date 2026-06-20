@@ -4,9 +4,11 @@ const { Bid, User, Project } = require("../models/models")
 class bidController{
     async create(req,res, next){
         try {
-            const {price, message, userId, projectId} = req.body
+            if (req.user.role !== 'freelancer') return next(ApiError.forbidden('Only freelancers can make bids'))
+            const {price, message, projectId} = req.body
+            const userId = req.user.id
             const bid = await Bid.create({price, message, UserId: userId, ProjectId: projectId})
-            return res.json(bid)    
+            return res.json(bid)
         } catch (error) {
             return next(ApiError.badRequest(error.message))
         }
@@ -71,6 +73,7 @@ class bidController{
             const { id } = req.params
             const bid = await Bid.findByPk(id)
             if (!bid) return next(ApiError.badRequest('Bid not found'))
+            if (bid.UserId !== req.user.id) return next(ApiError.forbidden('Access denied'))
             await bid.destroy()
             return res.json({message: 'Successfully deleted'})
         } catch (e) {

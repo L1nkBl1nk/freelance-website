@@ -21,10 +21,7 @@ const Projects = observer(() =>{
     const { user } = useContext(Context)
 
     useEffect(() => {
-        getCategories().then(data => {
-            setCategories(data)
-            if (data.length > 0) setCategoryId(data[0].id)
-        })
+        getCategories().then(data => setCategories(data))
     }, [])
 
     const handleCreate = async () => {
@@ -92,6 +89,7 @@ const Projects = observer(() =>{
                                 <Form.Group controlId="Category" className="mb-3">
                                     <Form.Label>Category</Form.Label>
                                     <Form.Select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+                                        <option value="" disabled>Choose category</option>
                                         {categories.map(cat => (
                                             <option key={cat.id} value={cat.id}>{cat.name}</option>
                                         ))}

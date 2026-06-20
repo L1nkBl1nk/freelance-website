@@ -6,6 +6,7 @@ const {Project, User, Category} = require('../models/models')
 class projectController{
     async create(req,res,next){
         try {
+            if (req.user.role !== 'client') return next(ApiError.forbidden('Only clients can create projects'))
             const {title, description, budget, categoryId} = req.body || {}
             const userId = req.user.id
             let fileName = null

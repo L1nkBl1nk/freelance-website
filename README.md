@@ -4,6 +4,24 @@ Diploma project: a full-stack web platform connecting freelancers with clients.
 
 Repository: https://github.com/L1nkBl1nk/freelance-website
 
+## Demo
+
+**Project catalog** — browse projects with category filtering.
+
+![Projects feed](screenshots/01-projects-feed.png)
+
+**Bids / Applications** — freelancers compete for a project; the client accepts a bid.
+
+![Project bids](screenshots/02-project-bids.png)
+
+**Order & chat** — an order created from an accepted bid, with status management and in-order messaging.
+
+![Order chat](screenshots/03-order-chat.png)
+
+**Freelancer profile** — bio, skills, and reviews with star ratings.
+
+![Profile](screenshots/04-profile.png)
+
 ## Tech Stack
 
 - **Frontend:** React 19, Vite, React Router 7, MobX (state management), React-Bootstrap / Bootstrap 5, Axios
